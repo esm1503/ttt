@@ -1,36 +1,36 @@
-$(function(){
+$(function(){ //passing a functino into a $, don't want to run until document ready; also use document ready
 
   var table = $('table');
   var board = [];
-  var players = [ 'x', 'o' ];
+  var players = [ 'x', 'o' ]; //array or players
   var current = 0;
   var msg = $('#msg');
-  var whos_turn = $('#whos_turn');
+  var whos_turn = $('#whos_turn'); //grabbing reference to the element
   var game_over = false;
 
-  $('tr').each(function(){
+  $('tr').each(function(){ // taking reach row of the table and pushing to board
     board.push($(this).find('td').toArray());
   });
 
-  reset();
+  reset(); //reset function
 
-  $('td').on('click', click);
-  $('#reset').on('click', reset);
+  $('td').on('click', click); //calls click function
+  $('#reset').on('click', reset); //create callback to reset the game, call reset function
   
   function click(){
-    var el = $(this);
+    var el = $(this); //el stands for element
   
     if(game_over) return;
   
-    if(el.text() !== '') return msg.text('already set');
+    if(el.text() !== '') return msg.text('already set'); //check element if there is space, if filled show already set
     
-    msg.text("");
+    msg.text(""); //refresh text if there is a legal move
   
-    el.text(players[current]);
+    el.text(players[current]); //takes from array and sets current as x or o
   
-    current = (current < players.length-1) ? current + 1 : 0;
-  
-    whos_turn.text('player '+ (current+1));
+    current = (current < players.length-1) ? current + 1 : 0; //if 0 go to 1 if 1 go to 0
+  //is there still more room to increment through the array, if at end of array go to beginning
+    whos_turn.text('player '+ (current+1)); //shows text of player one or two turn
   
     checkForWin();
   }
@@ -42,7 +42,7 @@ $(function(){
     });
     
     // verticals
-    transpose(board).forEach(function(row){
+    transpose(board).forEach(function(row){ //transpose takes the columns and makes them rows
       if(checkRow(row)) markRow(row);
     });
     
@@ -66,7 +66,7 @@ $(function(){
   
   function markRow(row){
     row.forEach(function(cell){
-      $(cell).addClass('red');
+      $(cell).addClass('red'); //add css property to red
     });
     
     msg.text('player ' + ( players.indexOf(row[0].innerText) + 1 ) + ' wins!' );
@@ -87,7 +87,7 @@ $(function(){
   }
   
   
-  function reset(){
+  function reset(){ //reset the whole game
     $('td').removeClass('red').text('');
     current = 0;
     msg.text('');
